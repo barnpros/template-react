@@ -222,13 +222,16 @@ module.exports = function (webpackEnv) {
           enforce: "pre",
           use: [
             {
+              loader: require.resolve("eslint-loader"),
               options: {
+                configFile: `./config/eslint/${
+                  isEnvProduction ? "prod" : "dev"
+                }.config.js`,
                 cache: true,
                 formatter: require.resolve("react-dev-utils/eslintFormatter"),
                 eslintPath: require.resolve("eslint"),
                 resolvePluginsRelativeTo: __dirname,
               },
-              loader: require.resolve("eslint-loader"),
             },
           ],
           include: paths.appSrc,

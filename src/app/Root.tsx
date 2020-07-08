@@ -8,6 +8,7 @@ import { App } from "./App";
 export const Root: React.FC = () => (
   <>
     <Normalize />
+    {console.log("hi")}
 
     <ApolloProvider>
       <BrowserRouter>
