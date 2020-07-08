@@ -28,7 +28,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== "false";
 
 const imageInlineSizeLimit = parseInt(
-  process.env.IMAGE_INLINE_SIZE_LIMIT || "10000"
+  process.env.IMAGE_INLINE_SIZE_LIMIT || "10000",
 );
 
 // Check if TypeScript is setup
@@ -168,7 +168,7 @@ module.exports = function (webpackEnv) {
       // if there are any conflicts. This matches Node resolution mechanism.
       // https://github.com/facebook/create-react-app/issues/253
       modules: ["node_modules", paths.appNodeModules].concat(
-        modules.additionalModulePaths || []
+        modules.additionalModulePaths || [],
       ),
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support
@@ -256,8 +256,9 @@ module.exports = function (webpackEnv) {
               include: paths.appSrc,
               loader: require.resolve("babel-loader"),
               options: {
+                configFile: "./config/babel.config.js",
                 customize: require.resolve(
-                  "babel-preset-react-app/webpack-overrides"
+                  "babel-preset-react-app/webpack-overrides",
                 ),
                 plugins: [
                   [
@@ -352,8 +353,8 @@ module.exports = function (webpackEnv) {
                   minifyURLs: true,
                 },
               }
-            : undefined
-        )
+            : undefined,
+        ),
       ),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
@@ -403,7 +404,7 @@ module.exports = function (webpackEnv) {
             return manifest;
           }, seed);
           const entrypointFiles = entrypoints.main.filter(
-            (fileName) => !fileName.endsWith(".map")
+            (fileName) => !fileName.endsWith(".map"),
           );
 
           return {
