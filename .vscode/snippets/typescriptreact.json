@@ -1,0 +1,92 @@
+{
+  "Creates a function component": {
+    "Creates a function component as a named export": {
+      "prefix": "rhn",
+      "body": [
+        "import * as React from \"react\";",
+        "$1",
+        "",
+        "export const ${TM_FILENAME_BASE}: React.FC = () => {",
+        "  $2",
+        "",
+        "  return (",
+        "    $3",
+        "  );",
+        "};"
+      ],
+      "description": "Creates a named function component"
+    }
+  },
+  "Creates a named function component with props": {
+    "prefix": "rhnp",
+    "body": [
+      "import * as React from \"react\";",
+      "$1",
+      "",
+      "type Props = {}",
+      "",
+      "export const ${TM_FILENAME_BASE}: React.FC<Props> = () => {",
+      "  $2",
+      "",
+      "  return (",
+      "    $3",
+      "  );",
+      "};"
+    ],
+    "description": "Creates a named function component with props"
+  },
+  "Creates a file for testing a component": {
+    "prefix": "rt",
+    "body": [
+      "import * as React from 'react';",
+      "import { render } from '@testing-library/react';",
+      "",
+      "import ${TM_FILENAME_BASE/(.*)\\..+$/$1/} from \"./${TM_FILENAME_BASE/(.*)\\..+$/$1/}\";",
+      "",
+      "",
+      "describe(\"<${TM_FILENAME_BASE/(.*)\\..+$/$1/} /> tests\", () => {",
+      "  it(\"$1\", () => {",
+      "    //* Arrange",
+      "    const { getByTestId } = render(<${TM_FILENAME_BASE/(.*)\\..+$/$1/} />);",
+      "",
+      "    //* Act",
+      "    $2",
+      "",
+      "    //* Assert",
+      "    $3",
+      "",
+      "  })",
+      "})"
+    ],
+    "description": "Creates a file for testing a component"
+  },
+  "Create a new AAA Test": {
+    "prefix": "aaatest",
+    "body": [
+      "it(\"$1\", () => {",
+      "    //* Arrange",
+      "    const { getByTestId } = render(<${TM_FILENAME_BASE/(.*)\\..+$/$1/} />);",
+      "",
+      "    //* Act",
+      "    $2",
+      "",
+      "    //* Assert",
+      "    $3",
+      "",
+      "  })"
+    ]
+  },
+  "Bootstrap a Storybook story": {
+    "prefix": "story",
+    "body": [
+      "import { ${TM_FILENAME_BASE/(.*)\\..+$/$1/} } from \"./${TM_FILENAME_BASE/(.*)\\..+$/$1/}\";",
+      "",
+      "export default {",
+      "  title: \"${TM_DIRECTORY/^.+\\/(.*)$/${1:/pascalcase}/}/${TM_FILENAME_BASE/(.*)\\..+$/$1/}\",",
+      "  component: ${TM_FILENAME_BASE/(.*)\\..+$/$1/},",
+      "};",
+      "",
+      "$1"
+    ]
+  }
+}

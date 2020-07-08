@@ -1,0 +1,2 @@
+Utilities are helper functions, variables, and configurations to provide quality of life functionality across the application.
+Example: capitalizeString, formikConfig

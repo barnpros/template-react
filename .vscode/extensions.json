@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    /**
+     * Core Extensions
+     */
+    "KnisterPeter.vscode-commitizen",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint",
+    /**
+     * Quality of Life Extensions
+     */
+    "aaron-bond.better-comments",
+    "CoenraadS.bracket-pair-colorizer-2",
+    "BriteSnow.vscode-toggle-quotes",
+    "eamodio.gitlens"
+  ]
+}

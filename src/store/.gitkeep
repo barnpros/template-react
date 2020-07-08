@@ -1,0 +1,3 @@
+The store is the central location for storing all application level state files.
+Any contexts should be defined here in their own folder.
+Examples: UserContext/User.context.tsx

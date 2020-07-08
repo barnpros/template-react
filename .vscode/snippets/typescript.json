@@ -1,0 +1,44 @@
+{
+  "Creates an index file for routing a default export through": {
+    "prefix": "index",
+    "body": ["export * from \"./${TM_DIRECTORY/^.+\\/(.*)$/$1/}\""],
+    "description": "Creates an index file for routing named exports"
+  },
+  "Creates a Cypress.get": {
+    "prefix": "cyget",
+    "body": "cy.get(\"[data-testid='$1']\")$2"
+  },
+  "Creates a React Hook test": {
+    "prefix": "rth",
+    "body": [
+      "import { renderHook, act } from '@testing-library/react-hooks'",
+      "import $1 from '../../hooks/$1'",
+      "",
+      "test('should increment counter', () => {",
+      "  const { result } = renderHook(() => $1())",
+      "",
+      "  act(() => {",
+      "    result.current.increment()",
+      "  })",
+      "",
+      "  expect(result.current.count).toBe(1)",
+      "})"
+    ]
+  },
+  "Create a new AAA Test": {
+    "prefix": "aaatest",
+    "body": [
+      "it(\"$1\", () => {",
+      "    //* Arrange",
+      "    const { getByTestId } = render(<${TM_FILENAME_BASE/(.*)\\..+$/$1/} />);",
+      "",
+      "    //* Act",
+      "    $2",
+      "",
+      "    //* Assert",
+      "    $3",
+      "",
+      "  })"
+    ]
+  }
+}

@@ -19,5 +19,5 @@
     "target": "esnext"
   },
   "exclude": ["node_modules", "cypress", "webpack"],
-  "include": ["**/*.ts", "src/**/*.tsx"]
+  "include": ["src", "types"]
 }

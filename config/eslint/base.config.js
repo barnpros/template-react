@@ -25,6 +25,7 @@ module.exports = {
     "serviceWorker.ts",
     "*.svg",
     "*.d.ts",
+    ".gitkeep",
   ],
   rules: {
     "max-len": "off",

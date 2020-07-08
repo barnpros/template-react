@@ -1,0 +1,3 @@
+Containers are implementations of components.
+Where components are agnostic, or display only, containers use those components in specific use-cases.
+Examples: Login Form, Profile Preview Card

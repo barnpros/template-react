@@ -1,0 +1,4 @@
+All type definitions should be stored in this folder.
+This provides a known central location for types, which contributes to keeping the rest of the application clean and organized.
+Files in this folder should follow this naming convention: `[scope].types.ts`.
+Examples: form.types.ts, common.types.ts
