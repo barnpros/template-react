@@ -40,7 +40,7 @@ FROM nginx:1.19.0-alpine
 # Set up Nginx config and remove default files
 RUN rm -rf /usr/share/nginx/html/*
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./config/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Copy Production Dependencies
 COPY --from=builder /app/tmp/node_modules /usr/share/nginx/html/node_modules

@@ -8,15 +8,21 @@ import { GlobalStyles } from "../utils/style";
 
 export const Root: React.FC = () => (
   <>
-    {/* Global Stylesheets */}
+    {/**
+     * Global Stylesheets
+     */}
     <Normalize />
     <GlobalStyles />
 
-    {/* Wrappers */}
+    {/**
+     * Wrappers
+     */}
     <ApolloProvider>
       <BrowserRouter>
         <React.StrictMode>
-          {/* App Entrypoint */}
+          {/*
+           * App Entrypoint
+           */}
           <App />
         </React.StrictMode>
       </BrowserRouter>

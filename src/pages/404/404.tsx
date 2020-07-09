@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { DefaultPageLayout } from "../../components";
+import { DefaultPageLayout } from "../../components/templates";
 
 export const NotFound: React.FC = () => (
   <DefaultPageLayout pageTitle="404: Not Found">

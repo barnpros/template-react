@@ -37,7 +37,7 @@ module.exports = {
       extends: ["@barnpros/eslint-config/cypress"],
     },
     {
-      files: ["src/**/*.test.*"],
+      files: ["tests/**/*.test.*"],
       extends: ["@barnpros/eslint-config/jest"],
     },
   ],

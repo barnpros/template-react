@@ -88,7 +88,8 @@ jobs:
           at: ~/repo
       - checkout
       - setup_remote_docker:
-          docker_layer_caching: false
+          # This is a pro feature of CircleCI and will not affect non-pro user's builds
+          docker_layer_caching: true
       - run:
           name: Pull New Version Number
           command: git pull
@@ -149,6 +150,7 @@ workflows:
               only:
                 - /feature\/.*/
                 - /bugfix\/.*/
+                - /hotfix\/.*/
                 - /issue\/.*/
                 - /build\/.*/
       # Step Two: Run Validation Jobs
@@ -180,7 +182,6 @@ workflows:
           filters:
             branches:
               only:
-                - /hotfix\/.*/
                 - /release\/.*/
       # Step Two: Run Validation Jobs
       #   Step 2.1: Format

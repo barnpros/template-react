@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { DefaultPageLayout } from "../../components";
+import { DefaultPageLayout } from "../../components/templates";
 
 export const Welcome: React.FC = () => (
   <DefaultPageLayout pageTitle="Barn Pros React Template">
