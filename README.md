@@ -3,8 +3,11 @@
 ## Table of Contents
 
 [Introduction](#introduction)
+
 [Set Up](#setup)
+
 [Application Structure](#structure)
+
 [Deploying With Docker](#deployment)
 
 <a name="introduction"></a>
