@@ -4,15 +4,19 @@ import { BrowserRouter } from "react-router-dom";
 
 import { ApolloProvider } from "../lib";
 import { App } from "./App";
+import { GlobalStyles } from "../utils/style";
 
 export const Root: React.FC = () => (
   <>
+    {/* Global Stylesheets */}
     <Normalize />
-    {console.log("hi")}
+    <GlobalStyles />
 
+    {/* Wrappers */}
     <ApolloProvider>
       <BrowserRouter>
         <React.StrictMode>
+          {/* App Entrypoint */}
           <App />
         </React.StrictMode>
       </BrowserRouter>

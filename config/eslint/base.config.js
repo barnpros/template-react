@@ -19,14 +19,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  ignorePatterns: [
-    "dist",
-    "src/generated",
-    "serviceWorker.ts",
-    "*.svg",
-    "*.d.ts",
-    ".gitkeep",
-  ],
+  ignorePatterns: ["dist", "src/generated", "serviceWorker.ts", "*.d.ts"],
   rules: {
     "max-len": "off",
     "no-restricted-syntax": "off",

@@ -1,0 +1,269 @@
+# CircleCI Version
+version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@1.20.0
+
+# Define default options to be used on each job
+defaults: &defaults
+  working_directory: ~/repo
+  executor: cypress/base-12
+
+# Define Jobs
+jobs:
+  # Validate code style using Prettier
+  format:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Format with Prettier
+          command: npm run ci:format
+
+  # Run Eslint using development config
+  lint_with_dev_config:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Lint with Development Config
+          command: npm run ci:lint:ts:dev
+
+  # Run Eslint using production config
+  lint_with_prod_config:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Lint with Production Config
+          command: npm run ci:lint:ts:prod
+
+  # Run unit tests using Jest
+  test-unit:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Unit test with Jest
+          command: npm run ci:test:unit
+
+  test-e2e:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: E2E test with Cypress
+          command: npm run ci:test:e2e
+
+  # Increment app version based on conventional commits
+  increment_version:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - checkout
+      # Configure Git with the Barn Pros Machine User
+      - run:
+          name: Configure git with machine user
+          command: npm run ci:git:login
+      # Increment Version
+      - run:
+          name: Increment version based on conventional commits
+          command: npm run ci:version
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  # Publish up to date docker image in sync with npm version
+  version_docker_image:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Pull New Version Number
+          command: git pull
+      - run:
+          name: Login to docker
+          command: npm run ci:docker:login
+      - run:
+          name: Publish staging version of docker image
+          command: npm run ci:docker:version:staging
+      - run:
+          name: Publish production version of docker image
+          command: npm run ci:docker:version
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  # Deploy application to staging environment
+  deploy_to_staging:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - checkout
+      - run:
+          name: Deploy new version of app to Digital Ocean to staging environment
+          command: npm run ci:deploy:staging
+
+  # Deploy application to production environment
+  deploy_to_production:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - checkout
+      - run:
+          name: Deploy new version of app to Digital Ocean to production environment
+          command: npm run ci:deploy:production
+
+# Define Workflows
+workflows:
+  version: 2
+
+  #* ############################################
+  #* Job to run against regular working branches.
+  #* ############################################
+  working_branch_ci-cd:
+    jobs:
+      # Step One: Install Dependencies
+      # Install dependencies and configure Cypress
+      - cypress/install:
+          # Install with Yarn instead of npm
+          yarn: true
+          # # Build the application so e2e tests can be run using a production build
+          build: npm run build
+          filters:
+            branches:
+              only:
+                - /feature\/.*/
+                - /bugfix\/.*/
+                - /issue\/.*/
+                - /build\/.*/
+      # Step Two: Run Validation Jobs
+      #   Step 2.1: Format
+      - format:
+          requires:
+            - install
+      #   Step 2.2: Lint
+      - lint_with_dev_config:
+          requires:
+            - install
+      #   Step 2.3: Unit Test
+      - test-unit:
+          requires:
+            - install
+
+  #* ######################################################
+  #* Job to run when creating a new release for deployment.
+  #* ######################################################
+  create_new_release:
+    jobs:
+      # Step One: Install Dependencies
+      # Install dependencies and configure Cypress
+      - cypress/install:
+          # Install with Yarn instead of npm
+          yarn: true
+          # # Build the application so e2e tests can be run using a production build
+          build: npm run build
+          filters:
+            branches:
+              only:
+                - /hotfix\/.*/
+                - /release\/.*/
+      # Step Two: Run Validation Jobs
+      #   Step 2.1: Format
+      - format:
+          requires:
+            - install
+      #   Step 2.2: Lint
+      - lint_with_prod_config:
+          requires:
+            - install
+      #   Step 2.3: Unit Test
+      - test-unit:
+          requires:
+            - install
+      #   Step 2.4: Run e2e tests
+      - test-e2e:
+          requires:
+            - install
+      # Step Three: Increment NPM Version (in package.json)
+      - increment_version:
+          context: barnpros-context
+          requires:
+            - format
+            - lint_with_prod_config
+            - test-unit
+            - test-e2e
+      # Step Four: Publish docker image to dockerhub using NPM version as image tag
+      - version_docker_image:
+          context: barnpros-context
+          requires:
+            - increment_version
+
+  #* ################################################################
+  #* Job to run to deploy app to staging and production environments.
+  #* ################################################################
+  deploy:
+    jobs:
+      # Step One: Install Dependencies
+      # Install dependencies and configure Cypress
+      - cypress/install:
+          # Install with Yarn instead of npm
+          yarn: true
+          # # Build the application so e2e tests can be run using a production build
+          build: npm run build
+          filters:
+            branches:
+              only:
+                - staging
+                - master
+      # Step Two: Run Validation Jobs
+      #   Step 2.1: Format
+      - format:
+          requires:
+            - install
+      #   Step 2.2: Lint
+      - lint_with_prod_config:
+          requires:
+            - install
+      #   Step 2.3: Unit Test
+      - test-unit:
+          requires:
+            - install
+      #   Step 2.4: Run e2e tests
+      - test-e2e:
+          requires:
+            - install
+      # Step Three: Deploy Application
+      #   - If changes are merged to the staging branch, the app with deploy to the staging environment
+      - deploy_to_staging:
+          filters:
+            branches:
+              only:
+                - staging
+          requires:
+            - format
+            - lint_with_prod_config
+            - test-unit
+            - test-e2e
+      #   - If the changes are merged to master, the app will deploy to production
+      - deploy_to_production:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - test-e2e

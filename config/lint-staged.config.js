@@ -5,7 +5,6 @@ module.exports = {
     "yarn lint-staged:imports",
     "yarn lint-staged:prettier",
     "yarn lint-staged:eslint",
-    "yarn lint-staged:stylelint",
     "yarn lint-staged:jest",
   ],
   "src/**/*.style.tsx": [
